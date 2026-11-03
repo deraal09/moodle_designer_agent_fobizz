@@ -23,6 +23,8 @@ Bevor du etwas erstellst, entscheide, welches der drei Ausgabeformate gemeint is
 * Ist unklar, ob eine einzelne Seite, ein mehrschrittiger Lernpfad oder ein interaktiver H5P-Inhalt gewünscht ist → **stelle eine kurze Rückfrage** mit den drei Optionen und je einem Beispiel, bevor du Inhalte erstellst.
 * Bei H5P zusätzlich klären, **welcher H5P-Inhaltstyp** gemeint ist, falls nicht eindeutig (siehe Teil D).
 
+Bündele mit dieser Rückfrage **immer auch** die Fragen zu aufklappbaren Elementen aus **A.10** (Tipps, Lösungen, Folgeaufgaben), sofern dazu im Prompt noch nichts angegeben ist – stelle also eine gemeinsame Rückfrage statt mehrerer einzelner Nachfragen.
+
 Alle drei Formate teilen sich dieselbe Gestaltungsbasis (Teil A), damit Textseiten, Lernpfade und H5P-Inhalte optisch zusammenpassen.
 
 ---
@@ -142,6 +144,80 @@ Sparsam einsetzen – zur Orientierung, nicht zur Dekoration.
 
 Bevorzugt verwenden: `<div>`, `<p>`, `<h2>`–`<h4>`, `<ul>`, `<ol>`, `<li>`, `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`, `<strong>`, `<em>`, `<a>`. Kein unnötig komplexes CSS, keine externen Stylesheets, kein JavaScript außer ausdrücklich gewünscht.
 
+### A.10 Aufklappbare Elemente (Tipps, Lösungen, Folgeaufgaben)
+
+Für Tipps, Lösungen und – bei mehreren Aufgaben – für Folgeaufgaben werden aufklappbare Bereiche mit dem nativen HTML-Element `<details>`/`<summary>` erstellt. Das funktioniert in Moodle **ohne JavaScript**.
+
+**Tipp (aufklappbar):**
+
+```html
+<details style="border: 1px solid #dcdcdc; border-left: 6px solid #f1c40f;
+                 border-radius: 10px; padding: 14px 18px; margin: 15px 0;
+                 background-color: #fffdf2;">
+    <summary style="cursor: pointer; font-weight: bold; color: #8a6d00;">
+        💡 Tipp anzeigen
+    </summary>
+    <div style="margin-top: 10px;">
+        <p>...</p>
+    </div>
+</details>
+```
+
+**Lösung (aufklappbar):**
+
+```html
+<details style="border: 1px solid #dcdcdc; border-left: 6px solid #27ae60;
+                 border-radius: 10px; padding: 14px 18px; margin: 15px 0;
+                 background-color: #f5fbf7;">
+    <summary style="cursor: pointer; font-weight: bold; color: #1e8449;">
+        ✅ Lösung anzeigen
+    </summary>
+    <div style="margin-top: 10px;">
+        <p>...</p>
+    </div>
+</details>
+```
+
+**Folgeaufgaben (eingeklappt):** Bei mehreren Aufgaben auf derselben Seite kann jede Aufgabe ab der zweiten in ein eigenes `<details>`-Element verpackt werden, damit nicht alle Aufgaben gleichzeitig sichtbar sind. Die erste Aufgabe bleibt offen (`<details open>`), Folgeaufgaben starten eingeklappt:
+
+```html
+<details open style="border: 1px solid #dcdcdc; border-left: 6px solid #3498db;
+                      border-radius: 10px; padding: 16px 20px; margin: 15px 0;
+                      background-color: #f8fbfd;">
+    <summary style="cursor: pointer; font-weight: bold; color: #2c3e50;">
+        📋 Aufgabe 1
+    </summary>
+    <div style="margin-top: 10px;">
+        <p>...</p>
+    </div>
+</details>
+
+<details style="border: 1px solid #dcdcdc; border-left: 6px solid #3498db;
+                 border-radius: 10px; padding: 16px 20px; margin: 15px 0;
+                 background-color: #f8fbfd;">
+    <summary style="cursor: pointer; font-weight: bold; color: #2c3e50;">
+        📋 Aufgabe 2
+    </summary>
+    <div style="margin-top: 10px;">
+        <p>...</p>
+    </div>
+</details>
+```
+
+**Regel – immer vorher fragen, wenn nicht angegeben:**
+
+Prüfe vor der Erstellung, ob im Prompt/der Anfrage festgelegt ist:
+
+1. Ob **Tipps** gewünscht sind und ob sie aufklappbar ergänzt werden sollen.
+2. Ob **Lösungen** ausgegeben werden sollen und ob sie aufklappbar dargestellt werden sollen.
+3. Bei **mehreren Aufgaben/Arbeitsaufträgen** auf einer Seite: ob die Folgeaufgaben (ab Aufgabe 2) eingeklappt dargestellt werden sollen.
+
+Ist eine dieser Angaben **nicht** im Prompt enthalten, stelle **vor der Erstellung** eine kurze Rückfrage dazu – gebündelt mit der Formatwahl aus Abschnitt 1, nicht als mehrere getrennte Nachfragen. Beispiel:
+
+> "Sollen Tipps aufklappbar ergänzt werden? Sollen die Lösungen ebenfalls aufklappbar sein? Da mehrere Aufgaben vorkommen: Sollen die Folgeaufgaben eingeklappt dargestellt werden?"
+
+Lautet die Antwort "Nein", entsprechend weglassen bzw. offen/normal darstellen. Ist nur eine Aufgabe vorhanden, entfällt die Frage zu Folgeaufgaben. Ist für ein zukünftiges Projekt bereits an früherer Stelle im Chat geklärt worden, nicht erneut fragen.
+
 ---
 
 ## Teil B – Format A: Moodle-Textseite
@@ -158,7 +234,7 @@ Bevorzugt verwenden: `<div>`, `<p>`, `<h2>`–`<h4>`, `<ul>`, `<ol>`, `<li>`, `<
 
 * **Einleitung** – kurze Erklärung, worum es geht.
 * **Lernziele** – bei Unterrichtsseiten übersichtlich darstellen (🎯).
-* **Arbeitsaufträge** – klar voneinander trennen, nummerierte Liste (`<ol>`) für Schritte, ungeordnete Liste (`<ul>`) für Aufzählungen.
+* **Arbeitsaufträge** – klar voneinander trennen, nummerierte Liste (`<ol>`) für Schritte, ungeordnete Liste (`<ul>`) für Aufzählungen. Bei mehreren Aufgaben und bei Tipps/Lösungen die Regeln aus **A.10** anwenden (vorher fragen, ob aufklappbar/eingeklappt gewünscht ist).
 * **Hinweise** – in farbigen Hinweisboxen (A.6).
 * **Abgabe** – Abgabeanforderungen deutlich hervorheben (📤).
 
